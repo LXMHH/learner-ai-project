@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>单词接龙</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- 主题初始化：自动加载已设置的深色/浅色模式 -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 读取本地存储的主题设置
+        const savedTheme = localStorage.getItem('learner_theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark');
+        } else {
+            document.body.classList.remove('dark');
+        }
+    });
+</script>
+<script>
+// 全局加载主题+字体（所有页面共用）
+document.addEventListener('DOMContentLoaded',function(){
+    const t=localStorage.getItem('learner_theme');
+    if(t==='dark')document.body.classList.add('dark');
+    const s=localStorage.getItem('learner_fontSize')||16;
+    document.documentElement.style.setProperty('--base-font-size',s+'px');
+});
+</script>
+</head>
+<body>
+<div class="sidebar">
+    <div class="logo">Learner.ai</div>
+    <div class="menu">
+        <a href="index.html" class="menu-item"><i class="fas fa-home"></i><span>主页</span></a>
+        <a href="root.html" class="menu-item"><i class="fas fa-book"></i><span>词根溯源</span></a>
+        <a href="wordlib.html" class="menu-item"><i class="fas fa-file-alt"></i><span>词库</span></a>
+        <a href="wrongbook.html" class="menu-item"><i class="fas fa-times-circle"></i><span>错题本</span></a>
+        <a href="game.html" class="menu-item active"><i class="fas fa-cube"></i><span>单词游戏</span></a>
+        <a href="context.html" class="menu-item"><i class="fas fa-comment"></i><span>情境学习</span></a>
+        <a href="settings.html" class="menu-item"><i class="fas fa-cog"></i><span>设置</span></a>
+    </div>
+</div>
+
+<div class="main-content">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+        <h2>单词接龙</h2>
+        <button class="btn btn-outline" onclick="location.href='game.html'">返回大厅</button>
+    </div>
+
+    <!-- 原版接龙界面 + 可提交 -->
+    <div style="text-align:center; margin-top:60px;">
+        <p style="font-size:18px; margin-bottom:12px;">当前单词：<span id="nowWord" style="color:#2b6cb0; font-weight:bold;">cat</span></p>
+        <p style="font-size:16px; margin-bottom:24px;">请用尾字母 <span style="color:red; font-weight:bold;">t</span> 接龙</p>
+        
+        <input type="text" id="userWord" class="chain-input" placeholder="输入接龙单词" style="padding:14px; width:280px; border-radius:8px; border:1px solid #e5e7eb; text-align:center;">
+        <button class="btn btn-purple" id="submitBtn" style="margin-left:12px; padding:14px 24px;">提交</button>
+        
+        <p id="tip" style="margin-top:20px; font-size:16px;"></p>
+    </div>
+</div>
+
+<script>
+// 单词接龙交互
+const nowWord = document.getElementById('nowWord');
+const userWord = document.getElementById('userWord');
+const tip = document.getElementById('tip');
+let lastChar = 't';
+
+document.getElementById('submitBtn').onclick = () => {
+    const val = userWord.value.trim().toLowerCase();
+    if(!val){
+        tip.innerText = '请输入单词！';
+        tip.style.color = 'red';
+        return;
+    }
+    // 尾字母判断
+    if(val[0] == lastChar){
+        tip.innerText = '接龙成功！';
+        tip.style.color = 'green';
+        // 更新单词
+        nowWord.innerText = val;
+        lastChar = val[val.length-1];
+        userWord.value = '';
+    }else{
+        tip.innerText = `接龙失败！需以 ${lastChar} 开头`;
+        tip.style.color = 'red';
+    }
+};
+</script>
+</body>
+</html>

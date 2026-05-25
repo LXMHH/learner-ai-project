@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learner.ai - 词根溯源</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- 主题初始化：自动加载已设置的深色/浅色模式 -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 读取本地存储的主题设置
+        const savedTheme = localStorage.getItem('learner_theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark');
+        } else {
+            document.body.classList.remove('dark');
+        }
+    });
+</script>
+<script>
+// 全局加载主题+字体（所有页面共用）
+document.addEventListener('DOMContentLoaded',function(){
+    const t=localStorage.getItem('learner_theme');
+    if(t==='dark')document.body.classList.add('dark');
+    const s=localStorage.getItem('learner_fontSize')||16;
+    document.documentElement.style.setProperty('--base-font-size',s+'px');
+});
+</script>
+</head>
+<body>
+    <!-- 侧边栏（完全保留） -->
+    <div class="sidebar">
+        <div class="logo">Learner.ai</div>
+        <div class="menu">
+            <a href="index.html" class="menu-item">
+                <i class="fas fa-home"></i>
+                <span>主页</span>
+            </a>
+            <a href="root.html" class="menu-item active">
+                <i class="fas fa-book"></i>
+                <span>词根溯源</span>
+            </a>
+            <a href="wordlib.html" class="menu-item">
+                <i class="fas fa-file-alt"></i>
+                <span>词库</span>
+            </a>
+            <a href="wrongbook.html" class="menu-item">
+                <i class="fas fa-times-circle"></i>
+                <span>错题本</span>
+            </a>
+            <a href="game.html" class="menu-item">
+                <i class="fas fa-cube"></i>
+                <span>单词游戏</span>
+            </a>
+            <a href="context.html" class="menu-item">
+                <i class="fas fa-comment"></i>
+                <span>情境学习</span>
+            </a>
+            <a href="settings.html" class="menu-item">
+                <i class="fas fa-cog"></i>
+                <span>设置</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- 主内容区 -->
+    <div class="main-content">
+        <!-- 右上角登录/注册按钮 -->
+        <div class="auth-buttons">
+            <button class="btn btn-outline" id="loginBtn">登录</button>
+            <button class="btn btn-primary" id="registerBtn">注册</button>
+        </div>
+
+        <!-- 搜索框：仅添加ID，样式完全不变 -->
+        <div style="margin-top: 80px; margin-bottom: 24px; display: flex; gap: 12px;">
+            <input type="text" id="searchInput" placeholder="输入单词 / 词根 进行溯源查询..." 
+                   style="flex: 1; padding: 16px; border: 1px solid #e5e7eb; border-radius: 12px; font-size: 16px;">
+            <button class="btn btn-primary" id="searchBtn" style="width: 100px;">搜索</button>
+        </div>
+
+        <!-- 词根信息卡片 -->
+        <div class="blue-gradient-card" style="margin-bottom: 24px;">
+            <h3 style="font-size: 28px; margin-bottom: 8px;" id="rootName">词根：spect</h3>
+            <p style="font-size: 16px; margin-bottom: 6px;" id="rootMeaning">核心含义：看、观察、审视</p>
+            <p style="font-size: 16px; margin-bottom: 6px;" id="rootOrigin">词源：源自拉丁语 spectare 观看、打量</p>
+            <p style="font-size: 16px;" id="rootMnemonic">记忆口诀：见到 spect 都和「看」有关</p>
+        </div>
+
+        <!-- 单词详情卡片 -->
+        <div class="card" style="margin-bottom: 24px; border: 1px solid #e5e7eb;">
+            <h4 style="font-size: 32px; color: #111827; margin-bottom: 8px;" id="wordName">respect</h4>
+            <p style="color: #6b7280; font-size: 16px; margin-bottom: 20px;" id="wordInfo">/rɪˈspekt/ v./n. 尊重、尊敬</p>
+            
+            <div style="background-color: #f9fafb; padding: 16px; border-radius: 12px; margin-bottom: 20px;">
+                <p style="font-size: 16px;" id="wordSplit">单词拆分：re-（再） + <span style="color: #dd6b20; font-weight: bold;">spect</span>（看）</p>
+            </div>
+
+            <p style="font-size: 16px; line-height: 1.8; margin-bottom: 24px;">
+                <strong>溯源逻辑：</strong><span id="wordLogic">反复看待→看重→尊重</span><br>
+                <strong>例句：</strong><span id="wordExample">We respect our teachers.</span>
+            </p>
+
+            <!-- 同族单词标签 -->
+            <div style="margin-bottom: 32px;">
+                <h5 style="font-size: 18px; font-weight: 500; margin-bottom: 16px;">同词根 · 同族单词</h5>
+                <div style="display: flex; gap: 16px;" id="synonymsContainer">
+                    <span style="padding: 12px 20px; background-color: #ebf4ff; color: #2b6cb0; border-radius: 20px; font-size: 16px;">respect</span>
+                    <span style="padding: 12px 20px; background-color: #ebf4ff; color: #2b6cb0; border-radius: 20px; font-size: 16px;">inspect</span>
+                    <span style="padding: 12px 20px; background-color: #ebf4ff; color: #2b6cb0; border-radius: 20px; font-size: 16px;">suspect</span>
+                </div>
+            </div>
+
+            <!-- 上一个/下一个词根按钮 -->
+            <div style="display: flex; justify-content: center; gap: 24px;">
+                <button class="btn btn-outline" style="border-color: #2b6cb0; color: #2b6cb0;" id="prevRootBtn">上一个词根</button>
+                <button class="btn btn-outline" style="border-color: #2b6cb0; color: #2b6cb0;" id="nextRootBtn">下一个词根</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 登录/注册弹窗（完全保留） -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <h3>登录</h3>
+            <div class="form-group">
+                <label>用户名/邮箱</label>
+                <input type="text" placeholder="请输入用户名或邮箱">
+            </div>
+            <div class="form-group">
+                <label>密码</label>
+                <input type="password" placeholder="请输入密码">
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-outline close-modal">取消</button>
+                <button class="btn btn-primary">登录</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <h3>注册</h3>
+            <div class="form-group">
+                <label>用户名</label>
+                <input type="text" placeholder="请输入用户名">
+            </div>
+            <div class="form-group">
+                <label>邮箱</label>
+                <input type="email" placeholder="请输入邮箱">
+            </div>
+            <div class="form-group">
+                <label>密码</label>
+                <input type="password" placeholder="请输入密码">
+            </div>
+            <div class="form-group">
+                <label>确认密码</label>
+                <input type="password" placeholder="请再次输入密码">
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-outline close-modal">取消</button>
+                <button class="btn btn-primary">注册</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+    <script>
+        // 模拟数据（完全保留）
+        const rootData = [
+            {
+                root: "spect",
+                rootMeaning: "看、观察、审视",
+                rootOrigin: "源自拉丁语 spectare 观看、打量",
+                rootMnemonic: "见到 spect 都和「看」有关",
+                words: [
+                    {
+                        word: "respect",
+                        phonetic: "/rɪˈspekt/",
+                        partOfSpeech: "v./n.",
+                        meaning: "尊重、尊敬",
+                        split: "re-（再） + spect（看）",
+                        logic: "反复看待→看重→尊重",
+                        example: "We respect our teachers.",
+                        synonyms: ["respect", "inspect", "suspect"]
+                    },
+                    {
+                        word: "inspect",
+                        phonetic: "/ɪnˈspekt/",
+                        partOfSpeech: "v.",
+                        meaning: "检查、视察",
+                        split: "in-（向内） + spect（看）",
+                        logic: "向内看→仔细查看→检查",
+                        example: "The teacher inspected the students' homework.",
+                        synonyms: ["respect", "inspect", "suspect"]
+                    },
+                    {
+                        word: "suspect",
+                        phonetic: "/səˈspekt/",
+                        partOfSpeech: "v./n.",
+                        meaning: "怀疑、猜想",
+                        split: "sus-（下） + spect（看）",
+                        logic: "从下往上看→带着怀疑的目光看→怀疑",
+                        example: "I suspect he is lying.",
+                        synonyms: ["respect", "inspect", "suspect"]
+                    }
+                ]
+            },
+            {
+                root: "port",
+                rootMeaning: "搬运、携带",
+                rootOrigin: "源自拉丁语 portare 搬运",
+                rootMnemonic: "见到 port 都和「搬运」有关",
+                words: [
+                    {
+                        word: "import",
+                        phonetic: "/ɪmˈpɔːt/",
+                        partOfSpeech: "v./n.",
+                        meaning: "进口、输入",
+                        split: "im-（向内） + port（搬运）",
+                        logic: "向内搬运→进口",
+                        example: "We import goods from abroad.",
+                        synonyms: ["import", "export", "transport"]
+                    },
+                    {
+                        word: "export",
+                        phonetic: "/ˈekspɔːt/",
+                        partOfSpeech: "v./n.",
+                        meaning: "出口、输出",
+                        split: "ex-（向外） + port（搬运）",
+                        logic: "向外搬运→出口",
+                        example: "China exports many products.",
+                        synonyms: ["import", "export", "transport"]
+                    }
+                ]
+            }
+        ];
+
+        let currentRootIndex = 0;
+        let currentWordIndex = 0;
+
+        // 渲染函数（完全保留）
+        function renderWord() {
+            const currentRoot = rootData[currentRootIndex];
+            const currentWord = currentRoot.words[currentWordIndex];
+
+            document.getElementById("rootName").innerText = `词根：${currentRoot.root}`;
+            document.getElementById("rootMeaning").innerText = `核心含义：${currentRoot.rootMeaning}`;
+            document.getElementById("rootOrigin").innerText = `词源：${currentRoot.rootOrigin}`;
+            document.getElementById("rootMnemonic").innerText = `记忆口诀：${currentRoot.rootMnemonic}`;
+
+            document.getElementById("wordName").innerText = currentWord.word;
+            document.getElementById("wordInfo").innerText = `${currentWord.phonetic} ${currentWord.partOfSpeech} ${currentWord.meaning}`;
+            document.getElementById("wordSplit").innerHTML = `单词拆分：${currentWord.split.replace(/([a-z]+)/g, `<span style="color: #dd6b20; font-weight: bold;">$1</span>`)}`;
+            document.getElementById("wordLogic").innerText = currentWord.logic;
+            document.getElementById("wordExample").innerText = currentWord.example;
+
+            const synonymsContainer = document.getElementById("synonymsContainer");
+            synonymsContainer.innerHTML = "";
+            currentWord.synonyms.forEach(word => {
+                const span = document.createElement("span");
+                span.innerText = word;
+                span.style.padding = "12px 20px";
+                span.style.borderRadius = "20px";
+                span.style.fontSize = "16px";
+                if (word === currentWord.word) {
+                    span.style.backgroundColor = "#2b6cb0";
+                    span.style.color = "#ffffff";
+                } else {
+                    span.style.backgroundColor = "#ebf4ff";
+                    span.style.color = "#2b6cb0";
+                }
+                span.addEventListener("click", () => {
+                    const index = currentRoot.words.findIndex(w => w.word === word);
+                    if (index !== -1) {
+                        currentWordIndex = index;
+                        renderWord();
+                    }
+                });
+                synonymsContainer.appendChild(span);
+            });
+        }
+
+        // 上下词根按钮（完全保留）
+        document.getElementById("prevRootBtn").addEventListener("click", () => {
+            if (currentRootIndex > 0) {
+                currentRootIndex--;
+                currentWordIndex = 0;
+                renderWord();
+            } else {
+                alert("已经是第一个词根了！");
+            }
+        });
+
+        document.getElementById("nextRootBtn").addEventListener("click", () => {
+            if (currentRootIndex < rootData.length - 1) {
+                currentRootIndex++;
+                currentWordIndex = 0;
+                renderWord();
+            } else {
+                alert("已经是最后一个词根了！");
+            }
+        });
+
+        // ===================== ✅ 核心修复：搜索功能 =====================
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+
+        // 搜索函数
+        function doSearch() {
+            const keyword = searchInput.value.trim().toLowerCase();
+            if (!keyword) {
+                alert('请输入单词或词根进行搜索！');
+                return;
+            }
+
+            // 遍历数据，查找匹配的 词根/单词
+            let found = false;
+            for (let i = 0; i < rootData.length; i++) {
+                const root = rootData[i];
+                // 1. 匹配词根
+                if (root.root.toLowerCase() === keyword) {
+                    currentRootIndex = i;
+                    currentWordIndex = 0;
+                    renderWord();
+                    found = true;
+                    break;
+                }
+                // 2. 匹配单词
+                for (let j = 0; j < root.words.length; j++) {
+                    if (root.words[j].word.toLowerCase() === keyword) {
+                        currentRootIndex = i;
+                        currentWordIndex = j;
+                        renderWord();
+                        found = true;
+                        break;
+                    }
+                }
+                if (found) break;
+            }
+
+            if (!found) {
+                alert('未找到该单词/词根，请尝试搜索 spect/port/respect/import 等');
+            }
+        }
+
+        // 绑定搜索事件：点击按钮 + 回车搜索
+        searchBtn.addEventListener('click', doSearch);
+        searchInput.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') doSearch();
+        });
+        // =================================================================
+
+        // 初始化
+        renderWord();
+    </script>
+</body>
+</html>

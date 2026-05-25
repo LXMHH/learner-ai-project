@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>单词学习 - Learner.ai</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .star-active { color: #f59e0b !important; }
+        .word-card { padding: 30px; border-radius: 16px; border: 1px solid #e5e7eb; }
+        .phonetic { color: #6b7280; font-size: 18px; margin: 8px 0; }
+        .meaning { font-size: 22px; font-weight: 600; color: #111827; margin: 12px 0; }
+        .example { background: #f9fafb; padding: 16px; border-radius: 12px; margin: 20px 0; }
+    </style>
+<!-- 主题初始化：自动加载已设置的深色/浅色模式 -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 读取本地存储的主题设置
+        const savedTheme = localStorage.getItem('learner_theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark');
+        } else {
+            document.body.classList.remove('dark');
+        }
+    });
+</script>
+<script>
+// 全局加载主题+字体（所有页面共用）
+document.addEventListener('DOMContentLoaded',function(){
+    const t=localStorage.getItem('learner_theme');
+    if(t==='dark')document.body.classList.add('dark');
+    const s=localStorage.getItem('learner_fontSize')||16;
+    document.documentElement.style.setProperty('--base-font-size',s+'px');
+});
+</script>
+</head>
+<body>
+<!-- 侧边栏（和全站完全统一） -->
+<div class="sidebar">
+    <div class="logo">Learner.ai</div>
+    <div class="menu">
+        <a href="index.html" class="menu-item"><i class="fas fa-home"></i><span>主页</span></a>
+        <a href="root.html" class="menu-item"><i class="fas fa-book"></i><span>词根溯源</span></a>
+        <a href="wordlib.html" class="menu-item active"><i class="fas fa-file-alt"></i><span>词库</span></a>
+        <a href="wrongbook.html" class="menu-item"><i class="fas fa-times-circle"></i><span>错题本</span></a>
+        <a href="game.html" class="menu-item"><i class="fas fa-cube"></i><span>单词游戏</span></a>
+        <a href="context.html" class="menu-item"><i class="fas fa-comment"></i><span>情境学习</span></a>
+        <a href="settings.html" class="menu-item"><i class="fas fa-cog"></i><span>设置</span></a>
+    </div>
+</div>
+
+<div class="main-content">
+    <div class="auth-buttons">
+        <button class="btn btn-outline">登录</button>
+        <button class="btn btn-primary">注册</button>
+    </div>
+
+    <!-- 学习标题 -->
+    <div style="margin-top: 80px; margin-bottom: 24px;">
+        <h2 id="bookTitle" style="font-size: 28px;">人教版七年级上册 - 单词学习</h2>
+        <p style="color:#6b7280">当前词书：<span id="bookName">加载中...</span></p>
+    </div>
+
+    <!-- 单词学习卡片 -->
+    <div class="word-card">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h3 id="word" style="font-size: 40px; margin:0;">respect</h3>
+            <!-- 收藏按钮（同步错题本） -->
+            <i id="starBtn" class="far fa-star" style="font-size: 24px; cursor: pointer;"></i>
+        </div>
+        <p id="phonetic" class="phonetic">/rɪˈspekt/</p>
+        <p id="meaning" class="meaning">v./n. 尊重，尊敬</p>
+        
+        <div class="example">
+            <p><strong>例句：</strong><span id="example">We should respect our teachers.</span></p>
+        </div>
+
+        <p style="color:#6b7280"><strong>词根：</strong><span id="root">spect（看）</span></p>
+    </div>
+
+    <!-- 操作按钮 -->
+    <div style="display: flex; justify-content: space-between; margin-top: 30px;">
+        <button id="prevBtn" class="btn btn-outline">← 上一个单词</button>
+        <button id="wrongBtn" class="btn btn-red">❗ 加入错题本</button>
+        <button id="nextBtn" class="btn btn-outline">下一个单词 →</button>
+    </div>
+</div>
+
+<script>
+// ===================== 核心：词库 ↔ 错题本 数据互通 =====================
+// 1. 初中单词数据（可无限添加）
+const wordData = {
+    "七年级上册": [
+        { word: "good", phonetic: "/ɡʊd/", meaning: "adj. 好的", root: "无", example: "Good morning!" },
+        { word: "morning", phonetic: "/ˈmɔːnɪŋ/", meaning: "n. 早晨", root: "无", example: "I like morning." },
+        { word: "hello", phonetic: "/həˈləʊ/", meaning: "int. 你好", root: "无", example: "Hello everyone!" }
+    ],
+    "七年级下册": [
+        { word: "pen", phonetic: "/pen/", meaning: "n. 钢笔", root: "无", example: "This is my pen." },
+        { word: "book", phonetic: "/bʊk/", meaning: "n. 书", root: "无", example: "I have a book." }
+    ],
+    "八年级全册": [
+        { word: "respect", phonetic: "/rɪˈspekt/", meaning: "v./n. 尊重", root: "spect(看)", example: "We respect teachers." },
+        { word: "inspect", phonetic: "/ɪnˈspekt/", meaning: "v. 检查", root: "spect(看)", example: "Inspect the room." }
+    ]
+};
+
+// 2. 获取词库传递的词书名称
+const params = new URLSearchParams(window.location.search);
+const currentBook = params.get('book') || "七年级上册";
+document.getElementById('bookName').innerText = currentBook;
+document.getElementById('bookTitle').innerText = `${currentBook} - 单词学习`;
+
+// 3. 当前单词索引
+let currentIndex = 0;
+let currentWords = wordData[currentBook] || wordData["七年级上册"];
+
+// 4. 渲染单词
+function renderWord() {
+    const w = currentWords[currentIndex];
+    document.getElementById('word').innerText = w.word;
+    document.getElementById('phonetic').innerText = w.phonetic;
+    document.getElementById('meaning').innerText = w.meaning;
+    document.getElementById('example').innerText = w.example;
+    document.getElementById('root').innerText = w.root;
+    
+    // 同步收藏状态
+    const star = document.getElementById('starBtn');
+    const saved = getSavedWords();
+    const isStar = saved.some(item => item.word === w.word && item.book === currentBook);
+    star.className = isStar ? "fas fa-star star-active" : "far fa-star";
+}
+
+// ===================== 本地存储（打通词库 ↔ 错题本）=====================
+// 获取收藏/错题数据
+function getSavedWords() {
+    return JSON.parse(localStorage.getItem('wrongWords')) || [];
+}
+// 保存数据
+function saveWords(arr) {
+    localStorage.setItem('wrongWords', JSON.stringify(arr));
+}
+
+// ===================== 功能按钮 =====================
+// 1. 收藏单词（同步到错题本）
+document.getElementById('starBtn').addEventListener('click', function() {
+    const w = currentWords[currentIndex];
+    let list = getSavedWords();
+    const exist = list.some(item => item.word === w.word);
+    
+    if (exist) {
+        list = list.filter(item => item.word !== w.word);
+        alert('已取消收藏！');
+    } else {
+        list.push({ ...w, book: currentBook, type: 'star', time: new Date().toLocaleDateString() });
+        alert('已收藏，可在错题本查看！');
+    }
+    saveWords(list);
+    renderWord();
+});
+
+// 2. 加入错题本（核心关联功能）
+document.getElementById('wrongBtn').addEventListener('click', function() {
+    const w = currentWords[currentIndex];
+    let list = getSavedWords();
+    const exist = list.some(item => item.word === w.word);
+    
+    if (exist) {
+        alert('该单词已在错题本中！');
+        return;
+    }
+    list.push({ ...w, book: currentBook, type: 'wrong', time: new Date().toLocaleDateString() });
+    saveWords(list);
+    alert('已加入错题本！');
+});
+
+// 3. 上一个/下一个
+document.getElementById('prevBtn').addEventListener('click', () => {
+    if (currentIndex > 0) {
+        currentIndex--;
+        renderWord();
+    } else alert('已经是第一个单词啦！');
+});
+document.getElementById('nextBtn').addEventListener('click', () => {
+    if (currentIndex < currentWords.length - 1) {
+        currentIndex++;
+        renderWord();
+    } else alert('已经是最后一个单词啦！');
+});
+
+// 初始化
+renderWord();
+</script>
+</body>
+</html>

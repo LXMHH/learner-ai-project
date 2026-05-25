@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learner.ai - 关于我们</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- 主题初始化：自动加载已设置的深色/浅色模式 -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 读取本地存储的主题设置
+        const savedTheme = localStorage.getItem('learner_theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark');
+        } else {
+            document.body.classList.remove('dark');
+        }
+    });
+</script>
+<script>
+// 全局加载主题+字体（所有页面共用）
+document.addEventListener('DOMContentLoaded',function(){
+    const t=localStorage.getItem('learner_theme');
+    if(t==='dark')document.body.classList.add('dark');
+    const s=localStorage.getItem('learner_fontSize')||16;
+    document.documentElement.style.setProperty('--base-font-size',s+'px');
+});
+</script>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">Learner.ai</div>
+        <div class="menu">
+            <a href="index.html" class="menu-item">
+                <i class="fas fa-home"></i>
+                <span>主页</span>
+            </a>
+            <a href="root.html" class="menu-item">
+                <i class="fas fa-book"></i>
+                <span>词根溯源</span>
+            </a>
+            <a href="wordlib.html" class="menu-item">
+                <i class="fas fa-file-alt"></i>
+                <span>词库</span>
+            </a>
+            <a href="wrongbook.html" class="menu-item">
+                <i class="fas fa-times-circle"></i>
+                <span>错题本</span>
+            </a>
+            <a href="game.html" class="menu-item">
+                <i class="fas fa-cube"></i>
+                <span>单词游戏</span>
+            </a>
+            <a href="context.html" class="menu-item">
+                <i class="fas fa-comment"></i>
+                <span>情境学习</span>
+            </a>
+            <a href="settings.html" class="menu-item active">
+                <i class="fas fa-cog"></i>
+                <span>设置</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="auth-buttons">
+            <button class="btn btn-outline" id="loginBtn">登录</button>
+            <button class="btn btn-primary" id="registerBtn">注册</button>
+        </div>
+
+        <div style="margin-top: 80px;">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 32px;">
+                <i class="fas fa-info-circle" style="font-size: 28px; color:#2b6cb0"></i>
+                <h2 style="font-size: 28px; color: #111827;">关于我们</h2>
+            </div>
+            
+            <div class="card" style="line-height:1.8;">
+                <h3 style="margin-bottom:16px; color:#2b6cb0">Learner.ai 智能单词记忆系统</h3>
+                <p style="margin-bottom:8px;">版本：v1.0.0</p>
+                <p style="margin-bottom:8px;">一款基于AI的智能英语单词学习平台，通过词根溯源、情境学习、趣味游戏等方式，让单词记忆更高效、更有趣。</p>
+                <p style="margin-bottom:8px;">核心功能：词根溯源、智能词库、错题巩固、游戏化学习、情境记忆。</p>
+                <p>© 2025 Learner.ai 版权所有</p>
+            </div>
+
+            <div class="card">
+                <div style="margin-bottom:12px;"><b>联系我们</b></div>
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                    <i class="fas fa-envelope" style="color:#2b6cb0;"></i>
+                    <span>support@learner.ai</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <i class="fas fa-globe" style="color:#2b6cb0;"></i>
+                    <span>www.learner.ai</span>
+                </div>
+            </div>
+
+            <button class="btn btn-outline" onclick="window.location.href='settings.html'" style="margin-top:16px;">← 返回设置</button>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

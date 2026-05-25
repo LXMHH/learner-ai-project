@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>单词游戏</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- 主题初始化：自动加载已设置的深色/浅色模式 -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 读取本地存储的主题设置
+        const savedTheme = localStorage.getItem('learner_theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark');
+        } else {
+            document.body.classList.remove('dark');
+        }
+    });
+</script>
+<script>
+// 全局加载主题+字体（所有页面共用）
+document.addEventListener('DOMContentLoaded',function(){
+    const t=localStorage.getItem('learner_theme');
+    if(t==='dark')document.body.classList.add('dark');
+    const s=localStorage.getItem('learner_fontSize')||16;
+    document.documentElement.style.setProperty('--base-font-size',s+'px');
+});
+</script>
+</head>
+<body>
+<!-- 完全保留你原版侧边栏 -->
+<div class="sidebar">
+    <div class="logo">Learner.ai</div>
+    <div class="menu">
+        <a href="index.html" class="menu-item"><i class="fas fa-home"></i><span>主页</span></a>
+        <a href="root.html" class="menu-item"><i class="fas fa-book"></i><span>词根溯源</span></a>
+        <a href="wordlib.html" class="menu-item"><i class="fas fa-file-alt"></i><span>词库</span></a>
+        <a href="wrongbook.html" class="menu-item"><i class="fas fa-times-circle"></i><span>错题本</span></a>
+        <a href="game.html" class="menu-item active"><i class="fas fa-cube"></i><span>单词游戏</span></a>
+        <a href="context.html" class="menu-item"><i class="fas fa-comment"></i><span>情境学习</span></a>
+        <a href="settings.html" class="menu-item"><i class="fas fa-cog"></i><span>设置</span></a>
+    </div>
+</div>
+
+<div class="main-content">
+    <div class="auth-buttons">
+        <button class="btn btn-outline" id="loginBtn">登录</button>
+        <button class="btn btn-primary" id="registerBtn">注册</button>
+    </div>
+
+    <!-- 完全还原你原版游戏大厅样式 + 修复跳转链接 -->
+    <div style="margin-top:80px;">
+        <h2 style="font-size:28px; margin-bottom:12px;">单词游戏大厅</h2>
+        <p style="color:#6b7280;">选择游戏开始挑战</p>
+        
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:32px; margin-top:40px;">
+            <!-- 单词消消乐 → 可跳转 -->
+            <a href="game_match.html" class="card" style="text-align:center; text-decoration:none;">
+                <i class="fas fa-gem" style="font-size:36px; color:#8b5cf6; margin-bottom:16px;"></i>
+                <h3 style="font-size:20px; color:#111827;">单词消消乐</h3>
+                <p style="color:#6b7280; margin-top:8px;">英汉配对消消乐</p>
+            </a>
+
+            <!-- 单词接龙 → 可跳转 -->
+            <a href="game_chain.html" class="card" style="text-align:center; text-decoration:none;">
+                <i class="fas fa-link" style="font-size:36px; color:#8b5cf6; margin-bottom:16px;"></i>
+                <h3 style="font-size:20px; color:#111827;">单词接龙</h3>
+                <p style="color:#6b7280; margin-top:8px;">尾字母接龙</p>
+            </a>
+
+            <!-- 单词PK → 可跳转 -->
+            <a href="game_pk.html" class="card" style="text-align:center; text-decoration:none;">
+                <i class="fas fa-users" style="font-size:36px; color:#8b5cf6; margin-bottom:16px;"></i>
+                <h3 style="font-size:20px; color:#111827;">单词PK</h3>
+                <p style="color:#6b7280; margin-top:8px;">人机对战答题</p>
+            </a>
+        </div>
+    </div>
+
+<script src="js/script.js"></script>
+</body>
+</html>

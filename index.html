@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learner.ai - 主页</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- 主题初始化：自动加载已设置的深色/浅色模式 -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 读取本地存储的主题设置
+        const savedTheme = localStorage.getItem('learner_theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark');
+        } else {
+            document.body.classList.remove('dark');
+        }
+    });
+</script>
+<script>
+// 全局加载主题+字体（所有页面共用）
+document.addEventListener('DOMContentLoaded',function(){
+    const t=localStorage.getItem('learner_theme');
+    if(t==='dark')document.body.classList.add('dark');
+    const s=localStorage.getItem('learner_fontSize')||16;
+    document.documentElement.style.setProperty('--base-font-size',s+'px');
+});
+</script>
+</head>
+<body>
+    <!-- 侧边栏：仅修正图标class，其余完全不变 -->
+    <div class="sidebar">
+        <div class="logo">Learner.ai</div>
+        <div class="menu">
+            <a href="index.html" class="menu-item active">
+                <i class="fas fa-home"></i>
+                <span>主页</span>
+            </a>
+            <a href="root.html" class="menu-item">
+                <i class="fas fa-book"></i>
+                <span>词根溯源</span>
+            </a>
+            <!-- 👇 统一修正：词库图标 -->
+            <a href="wordlib.html" class="menu-item">
+                <i class="fas fa-file-alt"></i>
+                <span>词库</span>
+            </a>
+            <!-- 👇 统一修正：错题本图标 -->
+            <a href="wrongbook.html" class="menu-item">
+                <i class="fas fa-times-circle"></i>
+                <span>错题本</span>
+            </a>
+            <!-- 👇 统一修正：单词游戏图标 -->
+            <a href="game.html" class="menu-item">
+                <i class="fas fa-cube"></i>
+                <span>单词游戏</span>
+            </a>
+            <a href="context.html" class="menu-item">
+                <i class="fas fa-comment"></i>
+                <span>情境学习</span>
+            </a>
+            <a href="settings.html" class="menu-item">
+                <i class="fas fa-cog"></i>
+                <span>设置</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- 主内容区（完全没动，和你原代码一模一样） -->
+    <div class="main-content">
+        <div class="auth-buttons">
+            <button class="btn btn-outline" id="loginBtn">登录</button>
+            <button class="btn btn-primary" id="registerBtn">注册</button>
+        </div>
+
+        <div style="margin-top: 120px; display: flex; justify-content: center;">
+            <div class="blue-gradient-card" style="width: 800px;">
+                <h2 style="font-size: 28px; margin-bottom: 12px;">词根溯源 · 高效记单词</h2>
+                <p style="font-size: 16px; line-height: 1.8; margin-bottom: 20px;">
+                    通过词根词缀溯源拆解，理解单词本源逻辑，举一反三记忆同族单词，告别死记硬背。
+                </p>
+                <a href="root.html" class="btn" style="background-color: white; color: #2b6cb0; font-weight: 500;">立即进入</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 登录/注册弹窗（完全没动） -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <h3>登录</h3>
+            <div class="form-group">
+                <label>用户名/邮箱</label>
+                <input type="text" placeholder="请输入用户名或邮箱">
+            </div>
+            <div class="form-group">
+                <label>密码</label>
+                <input type="password" placeholder="请输入密码">
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-outline close-modal">取消</button>
+                <button class="btn btn-primary">登录</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <h3>注册</h3>
+            <div class="form-group">
+                <label>用户名</label>
+                <input type="text" placeholder="请输入用户名">
+            </div>
+            <div class="form-group">
+                <label>邮箱</label>
+                <input type="email" placeholder="请输入邮箱">
+            </div>
+            <div class="form-group">
+                <label>密码</label>
+                <input type="password" placeholder="请输入密码">
+            </div>
+            <div class="form-group">
+                <label>确认密码</label>
+                <input type="password" placeholder="请再次输入密码">
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-outline close-modal">取消</button>
+                <button class="btn btn-primary">注册</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

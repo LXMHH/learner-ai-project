@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>单词消消乐</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- 主题初始化：自动加载已设置的深色/浅色模式 -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 读取本地存储的主题设置
+        const savedTheme = localStorage.getItem('learner_theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark');
+        } else {
+            document.body.classList.remove('dark');
+        }
+    });
+</script>
+<script>
+// 全局加载主题+字体（所有页面共用）
+document.addEventListener('DOMContentLoaded',function(){
+    const t=localStorage.getItem('learner_theme');
+    if(t==='dark')document.body.classList.add('dark');
+    const s=localStorage.getItem('learner_fontSize')||16;
+    document.documentElement.style.setProperty('--base-font-size',s+'px');
+});
+</script>
+</head>
+<body>
+<div class="sidebar">
+    <div class="logo">Learner.ai</div>
+    <div class="menu">
+        <a href="index.html" class="menu-item"><i class="fas fa-home"></i><span>主页</span></a>
+        <a href="root.html" class="menu-item"><i class="fas fa-book"></i><span>词根溯源</span></a>
+        <a href="wordlib.html" class="menu-item"><i class="fas fa-file-alt"></i><span>词库</span></a>
+        <a href="wrongbook.html" class="menu-item"><i class="fas fa-times-circle"></i><span>错题本</span></a>
+        <a href="game.html" class="menu-item active"><i class="fas fa-cube"></i><span>单词游戏</span></a>
+        <a href="context.html" class="menu-item"><i class="fas fa-comment"></i><span>情境学习</span></a>
+        <a href="settings.html" class="menu-item"><i class="fas fa-cog"></i><span>设置</span></a>
+    </div>
+</div>
+
+<div class="main-content">
+    <!-- 原版样式头部 -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+        <h2>单词消消乐</h2>
+        <div style="display:flex; gap:12px;">
+            <button class="btn btn-outline" onclick="location.href='game.html'">返回大厅</button>
+            <button class="btn btn-purple" id="restartBtn">重新开始</button>
+            <button class="btn btn-purple">得分：<span id="score">0</span></button>
+        </div>
+    </div>
+
+    <!-- 原版消消乐卡片布局 + 可配对交互 -->
+    <div class="match-grid" id="matchBox" style="display:grid; grid-template-columns:repeat(6,1fr); gap:16px;">
+        <div class="match-card-en" data-word="challenge">challenge</div>
+        <div class="match-card-zh" data-word="挑战">挑战</div>
+        <div class="match-card-en" data-word="cancel">cancel</div>
+        <div class="match-card-zh" data-word="取消">取消</div>
+        <div class="match-card-en" data-word="develop">develop</div>
+        <div class="match-card-zh" data-word="发展">发展</div>
+        <div class="match-card-en" data-word="experience">experience</div>
+        <div class="match-card-zh" data-word="经历">经历</div>
+        <div class="match-card-en" data-word="significant">significant</div>
+        <div class="match-card-zh" data-word="重要的">重要的</div>
+        <div class="match-card-en" data-word="accommodate">accommodate</div>
+        <div class="match-card-zh" data-word="容纳">容纳</div>
+    </div>
+</div>
+
+<script>
+// 👇 核心修复：添加 英文 ↔ 中文 配对字典
+const wordMatch = {
+    "challenge": "挑战",
+    "cancel": "取消",
+    "develop": "发展",
+    "experience": "经历",
+    "significant": "重要的",
+    "accommodate": "容纳"
+};
+
+let firstSelect = null;
+let score = 0;
+const scoreText = document.getElementById("score");
+const allCards = document.querySelectorAll(".match-card-en, .match-card-zh");
+
+allCards.forEach(card => {
+    card.onclick = function() {
+        // 已消除卡片禁止点击
+        if (this.classList.contains("removed")) return;
+
+        // 第一次点击
+        if (!firstSelect) {
+            firstSelect = this;
+            this.style.backgroundColor = "#d1fae5";
+            return;
+        }
+
+        // 获取两张卡片的类型（英文/中文）和内容
+        const isFirstEn = firstSelect.classList.contains("match-card-en");
+        const isCurrentEn = this.classList.contains("match-card-en");
+        const firstVal = firstSelect.dataset.word;
+        const currentVal = this.dataset.word;
+
+        let isSuccess = false;
+
+        // 👇 核心修复：正确判断英汉配对
+        if (isFirstEn && !isCurrentEn) {
+            // 先英文后中文
+            isSuccess = wordMatch[firstVal] === currentVal;
+        } else if (!isFirstEn && isCurrentEn) {
+            // 先中文后英文
+            isSuccess = wordMatch[currentVal] === firstVal;
+        }
+
+        if (isSuccess) {
+            // 配对成功 → 立即消失
+            firstSelect.style.opacity = "0";
+            firstSelect.style.pointerEvents = "none";
+            firstSelect.classList.add("removed");
+            
+            this.style.opacity = "0";
+            this.style.pointerEvents = "none";
+            this.classList.add("removed");
+
+            score += 10;
+            scoreText.innerText = score;
+        } else {
+            // 配对失败 → 恢复原样
+            setTimeout(() => {
+                firstSelect.style.backgroundColor = "";
+                this.style.backgroundColor = "";
+            }, 300);
+        }
+
+        firstSelect = null;
+    };
+});
+
+// 重新开始功能
+document.getElementById("restartBtn").onclick = function() {
+    allCards.forEach(card => {
+        card.style.opacity = "1";
+        card.style.pointerEvents = "auto";
+        card.style.backgroundColor = "";
+        card.classList.remove("removed");
+    });
+    score = 0;
+    scoreText.innerText = score;
+    firstSelect = null;
+};
+</script>
+</body>
+</html>

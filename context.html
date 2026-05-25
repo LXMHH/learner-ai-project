@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>情境学习 - Learner.ai</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .context-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 28px;
+            border: 1px solid #e5e7eb;
+            margin-bottom: 24px;
+        }
+        .context-input {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 16px;
+            margin-bottom: 16px;
+        }
+        .article-box {
+            line-height: 1.8;
+            font-size: 17px;
+            margin: 20px 0;
+        }
+        .blank-input {
+            width: 110px;
+            padding: 4px 8px;
+            border: 1px solid #2b6cb0;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 16px;
+            margin: 0 6px;
+            outline: none;
+        }
+        .blank-input.right {
+            border-color: #10b981;
+            background: #f0fdf4;
+        }
+        .blank-input.wrong {
+            border-color: #ef4444;
+            background: #fef2f2;
+        }
+        .translate-box {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+            line-height: 1.7;
+            color: #374151;
+            margin-top: 20px;
+            border-left: 4px solid #2b6cb0;
+        }
+        .btn-group {
+            display: flex;
+            gap: 16px;
+            margin-top: 20px;
+        }
+    </style>
+<!-- 主题初始化：自动加载已设置的深色/浅色模式 -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 读取本地存储的主题设置
+        const savedTheme = localStorage.getItem('learner_theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark');
+        } else {
+            document.body.classList.remove('dark');
+        }
+    });
+</script>
+<script>
+// 全局加载主题+字体（所有页面共用）
+document.addEventListener('DOMContentLoaded',function(){
+    const t=localStorage.getItem('learner_theme');
+    if(t==='dark')document.body.classList.add('dark');
+    const s=localStorage.getItem('learner_fontSize')||16;
+    document.documentElement.style.setProperty('--base-font-size',s+'px');
+});
+</script>
+</head>
+<body>
+<div class="sidebar">
+    <div class="logo">Learner.ai</div>
+    <div class="menu">
+        <a href="index.html" class="menu-item"><i class="fas fa-home"></i><span>主页</span></a>
+        <a href="root.html" class="menu-item"><i class="fas fa-book"></i><span>词根溯源</span></a>
+        <a href="wordlib.html" class="menu-item"><i class="fas fa-file-alt"></i><span>词库</span></a>
+        <a href="wrongbook.html" class="menu-item"><i class="fas fa-times-circle"></i><span>错题本</span></a>
+        <a href="game.html" class="menu-item"><i class="fas fa-cube"></i><span>单词游戏</span></a>
+        <a href="context.html" class="menu-item active"><i class="fas fa-comment"></i><span>情境学习</span></a>
+        <a href="settings.html" class="menu-item"><i class="fas fa-cog"></i><span>设置</span></a>
+    </div>
+</div>
+
+<div class="main-content">
+    <div class="auth-buttons">
+        <button class="btn btn-outline">登录</button>
+        <button class="btn btn-primary">注册</button>
+    </div>
+
+    <div style="margin-top: 80px; margin-bottom: 24px;">
+        <h2 style="font-size: 28px; color: #111827;">📖 情境智能学习</h2>
+        <p style="color: #6b7280;">输入学习情境，自动生成带填空的英语短文 + 精准翻译</p>
+    </div>
+
+    <div class="context-card">
+        <h3 style="margin-bottom: 16px; font-size: 20px;">输入学习情境</h3>
+        <input type="text" id="contextInput" class="context-input" placeholder="例如：校园生活、家庭日常、运动健身、我的朋友……">
+        <button id="generateBtn" class="btn btn-primary" style="width: 100%;">🤖 智能生成短文</button>
+    </div>
+
+    <div id="resultArea" class="context-card" style="display: none;">
+        <h3 style="margin-bottom: 16px; font-size: 20px;">英语填空短文</h3>
+        <div id="articleBox" class="article-box"></div>
+        <h3 style="margin-top: 28px; margin-bottom: 16px; font-size: 20px;">中文翻译</h3>
+        <div id="translateBox" class="translate-box"></div>
+        <div class="btn-group">
+            <button id="checkBtn" class="btn btn-green">✅ 核对答案</button>
+            <button id="clearBtn" class="btn btn-outline">🔄 重新生成</button>
+        </div>
+    </div>
+</div>
+
+<script>
+  // 👇 你的扣子智能体链接
+const COZE_AGENT_URL = "https://www.coze.cn/store/agent/7641506845525753896?bot_id=true";
+
+document.getElementById('generateBtn').addEventListener('click', function() {
+    const context = document.getElementById('contextInput').value.trim();
+    if (!context) {
+        alert('请输入学习情境！');
+        return;
+    }
+    // 跳转扣子智能体
+    window.open(`${COZE_AGENT_URL}?text=${encodeURIComponent(context)}`, '_blank');
+});
+
+// 核对答案
+document.getElementById('checkBtn').addEventListener('click', function() {
+    alert('请在扣子页面生成答案后，在这里手动核对哦~');
+});
+
+// 重新生成（优化：清空输入+隐藏结果）
+document.getElementById('clearBtn').addEventListener('click', function() {
+    document.getElementById('contextInput').value = '';
+    document.getElementById('resultArea').style.display = 'none';
+});
+</script>
+</body>
+</html>

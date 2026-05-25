@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>词库 - Learner.ai</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- 主题初始化：自动加载已设置的深色/浅色模式 -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 读取本地存储的主题设置
+        const savedTheme = localStorage.getItem('learner_theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark');
+        } else {
+            document.body.classList.remove('dark');
+        }
+    });
+</script>
+<script>
+// 全局加载主题+字体（所有页面共用）
+document.addEventListener('DOMContentLoaded',function(){
+    const t=localStorage.getItem('learner_theme');
+    if(t==='dark')document.body.classList.add('dark');
+    const s=localStorage.getItem('learner_fontSize')||16;
+    document.documentElement.style.setProperty('--base-font-size',s+'px');
+});
+</script>
+</head>
+<body>
+<!-- 侧边栏（100%统一，图标正常） -->
+<div class="sidebar">
+    <div class="logo">Learner.ai</div>
+    <div class="menu">
+        <a href="index.html" class="menu-item"><i class="fas fa-home"></i><span>主页</span></a>
+        <a href="root.html" class="menu-item"><i class="fas fa-book"></i><span>词根溯源</span></a>
+        <a href="wordlib.html" class="menu-item active"><i class="fas fa-file-alt"></i><span>词库</span></a>
+        <a href="wrongbook.html" class="menu-item"><i class="fas fa-times-circle"></i><span>错题本</span></a>
+        <a href="game.html" class="menu-item"><i class="fas fa-cube"></i><span>单词游戏</span></a>
+        <a href="context.html" class="menu-item"><i class="fas fa-comment"></i><span>情境学习</span></a>
+        <a href="settings.html" class="menu-item"><i class="fas fa-cog"></i><span>设置</span></a>
+    </div>
+</div>
+
+<div class="main-content">
+    <!-- 登录注册按钮 -->
+    <div class="auth-buttons">
+        <button class="btn btn-outline" id="loginBtn">登录</button>
+        <button class="btn btn-primary" id="registerBtn">注册</button>
+    </div>
+
+    <!-- 标题 -->
+    <div style="margin-top: 80px; margin-bottom: 30px;">
+        <h2 style="font-size: 28px; font-weight: 600; color: #111827;">初中英语词库</h2>
+        <p style="color: #6b7280; margin-top: 8px;">专为初中生打造，同步教材 + 中考核心词汇</p>
+    </div>
+
+    <!-- 词书卡片 -->
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
+        
+        <div class="card" style="padding: 24px; border-radius: 12px; border: 1px solid #e5e7eb;">
+            <h3 style="font-size: 20px; margin-bottom: 12px; color: #111827;">人教版七年级上册</h3>
+            <p style="color: #6b7280; margin-bottom: 20px; line-height: 1.6;">初一上册同步词汇，零基础入门必备</p>
+            <button class="btn btn-primary" onclick="toStudy('七年级上册')">开始学习</button>
+        </div>
+
+        <div class="card" style="padding: 24px; border-radius: 12px; border: 1px solid #e5e7eb;">
+            <h3 style="font-size: 20px; margin-bottom: 12px; color: #111827;">人教版七年级下册</h3>
+            <p style="color: #6b7280; margin-bottom: 20px; line-height: 1.6;">初一下册同步词汇，基础进阶</p>
+            <button class="btn btn-primary" onclick="toStudy('七年级下册')">开始学习</button>
+        </div>
+
+        <div class="card" style="padding: 24px; border-radius: 12px; border: 1px solid #e5e7eb;">
+            <h3 style="font-size: 20px; margin-bottom: 12px; color: #111827;">人教版八年级全册</h3>
+            <p style="color: #6b7280; margin-bottom: 20px; line-height: 1.6;">初二核心词汇，中考基础储备</p>
+            <button class="btn btn-primary" onclick="toStudy('八年级全册')">开始学习</button>
+        </div>
+
+        <div class="card" style="padding: 24px; border-radius: 12px; border: 1px solid #e5e7eb;">
+            <h3 style="font-size: 20px; margin-bottom: 12px; color: #111827;">人教版九年级全册</h3>
+            <p style="color: #6b7280; margin-bottom: 20px; line-height: 1.6;">初三冲刺词汇，备战中考</p>
+            <button class="btn btn-primary" onclick="toStudy('九年级全册')">开始学习</button>
+        </div>
+
+        <div class="card" style="padding: 24px; border-radius: 12px; border: 1px solid #e5e7eb;">
+            <h3 style="font-size: 20px; margin-bottom: 12px; color: #111827;">初中核心1600词</h3>
+            <p style="color: #6b7280; margin-bottom: 20px; line-height: 1.6;">中考必考核心词汇，全覆盖</p>
+            <button class="btn btn-primary" onclick="toStudy('核心1600词')">开始学习</button>
+        </div>
+
+        <div class="card" style="padding: 24px; border-radius: 12px; border: 1px solid #e5e7eb;">
+            <h3 style="font-size: 20px; margin-bottom: 12px; color: #111827;">中考高频词汇</h3>
+            <p style="color: #6b7280; margin-bottom: 20px; line-height: 1.6;">真题高频词汇，提分专用</p>
+            <button class="btn btn-primary" onclick="toStudy('中考高频词')">开始学习</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// ✅ 修复：函数名和按钮完全一致，点击直接跳转学习页
+function toStudy(bookName) {
+    window.location.href = `study.html?book=${encodeURIComponent(bookName)}`;
+}
+</script>
+</body>
+</html>
